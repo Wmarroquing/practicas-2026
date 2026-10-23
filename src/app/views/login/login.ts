@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { UserService } from '../../services/user';
+
 @Component({
   imports: [CommonModule, ReactiveFormsModule],
   standalone: true,
@@ -9,12 +11,25 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
   templateUrl: './login.html',
 })
 export class Login {
+  private userService = inject(UserService)
+
   loginForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.required, Validators.minLength(6)]]
+    });
+  }
+
+  ngOnInit() {
+    this.userService.getUsuarios().subscribe({
+      next: (data) => {
+        console.log("Conexión exitosa desde Firebase:", data);
+      },
+      error: (err) => {
+        console.error("Error al conectar con la API:", err);
+      }
     });
   }
 
