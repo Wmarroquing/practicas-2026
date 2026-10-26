@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule],
@@ -12,6 +13,7 @@ import { UserService } from '../../services/user';
 })
 export class Login {
   private userService = inject(UserService)
+  private router = inject(Router);
 
   loginForm: FormGroup;
 
@@ -33,14 +35,39 @@ export class Login {
     });
   }
 
+
   onLogin() {
     if (this.loginForm.valid) {
-      console.log("Credeciales correctas", this.loginForm.value);
+      const { email, password } = this.loginForm.value;
+  
+      this.userService.getUsuarios().subscribe({
+        next: (response) => {
+          
+          const documents = response.documents || [];
+          
+          const usuarioEncontrado = documents.find((doc: any) => {
+            const dbEmail = doc.fields.correo?.stringValue || doc.fields.email?.stringValue;
+            const dbPassword = doc.fields.password?.stringValue;
+            
+            return dbEmail === email && dbPassword === password;
+          });
+
+          if (usuarioEncontrado) {
+            console.log("Inicio de sesión exitoso", usuarioEncontrado);
+            this.router.navigate(['/register']);
+  
+          } else {
+            console.warn("Correo o contraseña incorrectos.");
+          }
+        },
+        error: (err) => {
+          console.error("Error al consultar los usuarios en la base de datos:", err);
+        }
+      });
 
     } else {
-
       this.loginForm.markAllAsTouched();
-      console.log("El formulario contiene errores");
+      console.log("El formulario contiene errores de formato");
     }
   }
 }
