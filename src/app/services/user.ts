@@ -11,4 +11,21 @@ export class UserService {
     return this.http.get<any>(this.apiUrl);
   }
 
+
+    registrarUsuario(userData: any): Observable<any> {
+      const body = {
+        fields: {
+          Nombre: { stringValue: userData.nombre },
+          Apellido: { stringValue: userData.apellido },
+          edad: { integerValue: Number(userData.edad) },
+          correo: { stringValue: userData.correo },
+          genero: { stringValue: userData.genero },
+          password: { stringValue: userData.password }
+        }
+      };
+
+      return this.http.post<any>(this.apiUrl, body);
+    }
 }
+
+

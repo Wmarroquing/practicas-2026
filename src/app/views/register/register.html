@@ -6,35 +6,40 @@
             <p>Ingresa los datos</p>
         </div>
         
-        <form class="register-form">
+        <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="register-form">
             
             <div class="form-group">
                 <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" class="form-control" placeholder="Ingresa el nombre">
+                <input type="text" id="nombre" formControlName="nombre" class="form-control" placeholder="Ingresa el nombre">
             </div>
 
             <div class="form-group">
                 <label for="apellido">Apellido</label>
-                <input type="text" id="apellido" class="form-control" placeholder="Ingresa el apellido">
+                <input type="text" id="apellido" formControlName="apellido" class="form-control" placeholder="Ingresa el apellido">
             </div>
 
             <div class="form-group">
                 <label for="edad">Edad</label>
-                <input type="number" id="edad" class="form-control" placeholder="Ingresa la edad">
+                <input type="number" id="edad" formControlName="edad" class="form-control" placeholder="Ingresa la edad">
             </div>
 
             <div class="form-group">
                 <label for="correo">Correo</label>
-                <input type="email" id="correo" class="form-control" placeholder="correo@ejemplo.com">
+                <input type="email" id="correo" formControlName="correo" class="form-control" placeholder="correo@ejemplo.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" formControlName="password" class="form-control" placeholder="••••••••">
             </div>
 
             <div class="form-group">
                 <label for="genero">Género</label>
-                <select id="genero" class="form-control">
+                <select id="genero" formControlName="genero" class="form-control">
                     <option value="">Selecciona...</option>
-                    <option value="masculino">Masculino</option>
-                    <option value="femenino">Femenino</option>
-                    <option value="otro">Prefiero no decirlo</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Prefiero no decirlo</option>
                 </select>
             </div>
 
